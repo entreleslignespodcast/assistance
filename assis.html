@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Worken Assistant</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:linear-gradient(135deg,#07111f,#101d32,#07111f);
+    color:white;
+    min-height:100vh;
+}
+
+.app{
+    width:100%;
+    max-width:1000px;
+    margin:auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+/* HEADER */
+
+header{
+    padding:18px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid rgba(255,255,255,.1);
+    background:rgba(0,0,0,.25);
+    backdrop-filter:blur(10px);
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.logo-icon{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#00d4ff,#0066ff);
+    font-size:23px;
+    box-shadow:0 0 25px rgba(0,180,255,.5);
+}
+
+.logo h1{
+    font-size:20px;
+}
+
+.logo small{
+    display:block;
+    color:#9caec5;
+    margin-top:3px;
+}
+
+.controls{
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+
+select,
+.voice-btn{
+    background:#16253a;
+    color:white;
+    border:1px solid #31445e;
+    border-radius:10px;
+    padding:9px 12px;
+    cursor:pointer;
+}
+
+.voice-btn{
+    font-size:18px;
+}
+
+/* WELCOME */
+
+.welcome{
+    text-align:center;
+    padding:35px 20px 20px;
+}
+
+.robot{
+    font-size:65px;
+    margin-bottom:10px;
+}
+
+.welcome h2{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.welcome p{
+    color:#aab8c9;
+}
+
+/* QUICK BUTTONS */
+
+.quick{
+    display:flex;
+    gap:10px;
+    padding:15px 20px;
+    overflow-x:auto;
+}
+
+.quick button{
+    flex:1;
+    min-width:120px;
+    padding:13px;
+    border:none;
+    border-radius:12px;
+    background:#172941;
+    color:white;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.quick button:hover{
+    background:#214269;
+    transform:translateY(-2px);
+}
+
+/* CHAT */
+
+.chat{
+    flex:1;
+    padding:15px 20px;
+    overflow-y:auto;
+    min-height:350px;
+    max-height:600px;
+}
+
+.message{
+    display:flex;
+    margin:12px 0;
+}
+
+.message-content{
+    max-width:80%;
+    padding:13px 16px;
+    border-radius:16px;
+    line-height:1.5;
+    white-space:pre-wrap;
+}
+
+.assistant{
+    justify-content:flex-start;
+}
+
+.assistant .message-content{
+    background:#172941;
+    border-bottom-left-radius:4px;
+}
+
+.user{
+    justify-content:flex-end;
+}
+
+.user .message-content{
+    background:linear-gradient(135deg,#0066ff,#00a8ff);
+    border-bottom-right-radius:4px;
+}
+
+/* INPUT */
+
+.input-area{
+    padding:15px 20px 25px;
+    display:flex;
+    gap:10px;
+    border-top:1px solid rgba(255,255,255,.1);
+    background:rgba(0,0,0,.2);
+}
+
+.input-area input{
+    flex:1;
+    padding:15px;
+    border-radius:14px;
+    border:1px solid #31445e;
+    background:#101d30;
+    color:white;
+    outline:none;
+    font-size:16px;
+}
+
+.input-area input:focus{
+    border-color:#00a8ff;
+}
+
+.mic-btn,
+.send-btn{
+    width:52px;
+    border:none;
+    border-radius:14px;
+    cursor:pointer;
+    font-size:20px;
+    color:white;
+}
+
+.mic-btn{
+    background:#273a53;
+}
+
+.send-btn{
+    background:linear-gradient(135deg,#0066ff,#00b7ff);
+}
+
+.status{
+    text-align:center;
+    font-size:12px;
+    color:#7f91a9;
+    padding-bottom:8px;
+}
+
+/* CARDS */
+
+.info-card{
+    background:#101f34;
+    border:1px solid #29405c;
+    padding:15px;
+    border-radius:14px;
+    margin-top:8px;
+}
+
+.match{
+    padding:12px;
+    border-bottom:1px solid #2b3d54;
+}
+
+.match:last-child{
+    border-bottom:none;
+}
+
+.match-title{
+    font-weight:bold;
+    color:#fff;
+}
+
+.match-info{
+    color:#9fb0c4;
+    font-size:13px;
+    margin-top:5px;
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+    header{
+        padding:13px;
+    }
+
+    .logo h1{
+        font-size:17px;
+    }
+
+    .logo small{
+        font-size:10px;
+    }
+
+    .logo-icon{
+        width:40px;
+        height:40px;
+    }
+
+    select{
+        max-width:105px;
+        padding:8px;
+    }
+
+    .welcome{
+        padding:25px 15px 10px;
+    }
+
+    .robot{
+        font-size:50px;
+    }
+
+    .welcome h2{
+        font-size:25px;
+    }
+
+    .quick{
+        padding:12px;
+    }
+
+    .quick button{
+        min-width:105px;
+        padding:11px 8px;
+        font-size:13px;
+    }
+
+    .chat{
+        padding:10px 12px;
+    }
+
+    .message-content{
+        max-width:90%;
+        font-size:14px;
+    }
+
+    .input-area{
+        padding:10px;
+    }
+
+    .input-area input{
+        min-width:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            🤖
+        </div>
+
+        <div>
+            <h1>Worken Assistant</h1>
+            <small>Votre assistant personnel</small>
+        </div>
+
+    </div>
+
+    <div class="controls">
+
+        <select id="languageSelect" onchange="changeLanguage()">
+            <option value="fr">🇫🇷 Français</option>
+            <option value="pt">🇧🇷 Português</option>
+            <option value="ht">🇭🇹 Kreyòl</option>
+            <option value="en">🇺🇸 English</option>
+            <option value="es">🇪🇸 Español</option>
+        </select>
+
+        <button
+            class="voice-btn"
+            id="voiceToggle"
+            onclick="toggleVoice()"
+            title="Activer/désactiver la voix">
+            🔊
+        </button>
+
+    </div>
+
+</header>
+
+
+<section class="welcome">
+
+    <div class="robot">🤖</div>
+
+    <h2 id="welcomeTitle">
+        Bonjour Worken
+    </h2>
+
+    <p id="welcomeText">
+        Je suis votre assistant. Posez-moi une question.
+    </p>
+
+</section>
+
+
+<div class="quick">
+
+    <button onclick="quickAsk('time')">
+        🕐 Heure
+    </button>
+
+    <button onclick="quickAsk('date')">
+        📅 Date
+    </button>
+
+    <button onclick="quickAsk('weather')">
+        🌤️ Météo
+    </button>
+
+    <button onclick="quickAsk('football')">
+        ⚽ Matchs
+    </button>
+
+</div>
+
+
+<div class="chat" id="chat">
+
+</div>
+
+
+<div class="status" id="status">
+    Worken Assistant est prêt
+</div>
+
+
+<div class="input-area">
+
+    <button
+        class="mic-btn"
+        onclick="startVoice()"
+        title="Parler">
+        🎤
+    </button>
+
+    <input
+        id="question"
+        type="text"
+        placeholder="Écrivez votre question..."
+        autocomplete="off">
+
+    <button
+        class="send-btn"
+        onclick="sendQuestion()">
+        ➤
+    </button>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   CONFIGURATION
+===================================================== */
+
+const FOOTBALL_API_KEY =
+"78909aeb85b6b9f9140d9b8b461e37c2";
+
+
+let currentLanguage = "fr";
+let voiceEnabled = true;
+let recognition = null;
+
+
+/* =====================================================
+   TRADUCTIONS
+===================================================== */
+
+const translations = {
+
+    fr:{
+        welcome:"Bonjour Worken",
+        welcomeText:"Je suis votre assistant. Posez-moi une question.",
+        placeholder:"Écrivez votre question...",
+        ready:"Worken Assistant est prêt",
+        listening:"🎤 Je vous écoute...",
+        time:"Il est actuellement",
+        date:"Nous sommes le",
+        weather:"Je vais rechercher la météo actuelle.",
+        football:"Je vais rechercher les matchs de football d'aujourd'hui.",
+        noMatches:"Aucun match trouvé pour aujourd'hui.",
+        weatherDenied:"Je ne peux pas accéder à votre position. Autorisez la localisation pour obtenir la météo.",
+        weatherError:"Impossible de récupérer la météo.",
+        footballError:"Impossible de récupérer les matchs.",
+        daytime:"Bonjour Worken. Comment je peux vous aider aujourd'hui ?",
+        nighttime:"Bonsoir Worken. Comment je peux vous aider aujourd'hui ?"
+    },
+
+    pt:{
+        welcome:"Olá Worken",
+        welcomeText:"Sou seu assistente. Faça uma pergunta.",
+        placeholder:"Digite sua pergunta...",
+        ready:"Worken Assistant está pronto",
+        listening:"🎤 Estou ouvindo...",
+        time:"Agora são",
+        date:"Hoje é",
+        weather:"Vou procurar o clima atual.",
+        football:"Vou procurar os jogos de futebol de hoje.",
+        noMatches:"Nenhum jogo encontrado para hoje.",
+        weatherDenied:"Não consigo acessar sua localização. Permita a localização para obter o clima.",
+        weatherError:"Não foi possível obter o clima.",
+        footballError:"Não foi possível obter os jogos.",
+        daytime:"Bom dia Worken. Como posso ajudar você hoje?",
+        nighttime:"Boa noite Worken. Como posso ajudar você hoje?"
+    },
+
+    ht:{
+        welcome:"Bonjou Worken",
+        welcomeText:"Mwen se asistan ou. Poze m yon kesyon.",
+        placeholder:"Ekri kesyon ou...",
+        ready:"Worken Assistant pare",
+        listening:"🎤 M ap koute ou...",
+        time:"Kounye a li",
+        date:"Jodi a se",
+        weather:"M ap chèche tanperati aktyèl la.",
+        football:"M ap chèche match foutbòl jodi a.",
+        noMatches:"Pa gen match ki jwenn pou jodi a.",
+        weatherDenied:"Mwen pa kapab jwenn pozisyon ou. Pèmèt lokalizasyon an pou jwenn meteyo a.",
+        weatherError:"Mwen pa kapab jwenn meteyo a.",
+        footballError:"Mwen pa kapab jwenn match yo.",
+        daytime:"Bonjou Worken. Kijan mwen ka ede ou jodi a?",
+        nighttime:"Bonswa Worken. Kijan mwen ka ede ou jodi a?"
+    },
+
+    en:{
+        welcome:"Hello Worken",
+        welcomeText:"I am your assistant. Ask me a question.",
+        placeholder:"Write your question...",
+        ready:"Worken Assistant is ready",
+        listening:"🎤 I'm listening...",
+        time:"It is currently",
+        date:"Today is",
+        weather:"I will search for the current weather.",
+        football:"I will search for today's football matches.",
+        noMatches:"No matches found for today.",
+        weatherDenied:"I cannot access your location. Allow location access to get the weather.",
+        weatherError:"Unable to retrieve the weather.",
+        footballError:"Unable to retrieve the matches.",
+        daytime:"Good morning Worken. How can I help you today?",
+        nighttime:"Good evening Worken. How can I help you today?"
+    },
+
+    es:{
+        welcome:"Hola Worken",
+        welcomeText:"Soy tu asistente. Hazme una pregunta.",
+        placeholder:"Escribe tu pregunta...",
+        ready:"Worken Assistant está listo",
+        listening:"🎤 Te escucho...",
+        time:"Actualmente son las",
+        date:"Hoy es",
+        weather:"Voy a buscar el clima actual.",
+        football:"Voy a buscar los partidos de fútbol de hoy.",
+        noMatches:"No se encontraron partidos para hoy.",
+        weatherDenied:"No puedo acceder a tu ubicación. Permite la ubicación para obtener el clima.",
+        weatherError:"No se pudo obtener el clima.",
+        footballError:"No se pudieron obtener los partidos.",
+        daytime:"Buenos días Worken. ¿Cómo puedo ayudarte hoy?",
+        nighttime:"Buenas noches Worken. ¿Cómo puedo ayudarte hoy?"
+    }
+
+};
+
+
+/* =====================================================
+   CHANGER LANGUE
+===================================================== */
+
+function changeLanguage(){
+
+    currentLanguage =
+        document.getElementById("languageSelect").value;
+
+    const t = translations[currentLanguage];
+
+    document.getElementById("welcomeTitle").textContent =
+        t.welcome;
+
+    document.getElementById("welcomeText").textContent =
+        t.welcomeText;
+
+    document.getElementById("question").placeholder =
+        t.placeholder;
+
+    document.getElementById("status").textContent =
+        t.ready;
+
+}
+
+
+/* =====================================================
+   AJOUTER MESSAGE
+===================================================== */
+
+function addMessage(text,type="assistant",speak=false){
+
+    const chat =
+        document.getElementById("chat");
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        "message " + type;
+
+    const content =
+        document.createElement("div");
+
+    content.className =
+        "message-content";
+
+    content.innerHTML =
+        escapeHTML(text).replace(/\n/g,"<br>");
+
+    message.appendChild(content);
+
+    chat.appendChild(message);
+
+    chat.scrollTop =
+        chat.scrollHeight;
+
+    if(speak){
+        speakText(text);
+    }
+}
+
+
+/* =====================================================
+   PROTECTION HTML
+===================================================== */
+
+function escapeHTML(text){
+
+    return String(text)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+/* =====================================================
+   VOIX
+===================================================== */
+
+function getLocale(){
+
+    const locales = {
+
+        fr:"fr-FR",
+
+        pt:"pt-BR",
+
+        ht:"ht-HT",
+
+        en:"en-US",
+
+        es:"es-ES"
+
+    };
+
+    return locales[currentLanguage] || "fr-FR";
+}
+
+
+function speakText(text){
+
+    if(!voiceEnabled) return;
+
+    if(!("speechSynthesis" in window)) return;
+
+    window.speechSynthesis.cancel();
+
+    const speech =
+        new SpeechSynthesisUtterance(text);
+
+    speech.lang =
+        getLocale();
+
+    speech.rate =
+        1;
+
+    speech.pitch =
+        1;
+
+    speech.volume =
+        1;
+
+    window.speechSynthesis.speak(speech);
+}
+
+
+function toggleVoice(){
+
+    voiceEnabled =
+        !voiceEnabled;
+
+    const button =
+        document.getElementById("voiceToggle");
+
+    button.textContent =
+        voiceEnabled ? "🔊" : "🔇";
+
+    if(!voiceEnabled &&
+       "speechSynthesis" in window){
+
+        window.speechSynthesis.cancel();
+    }
+
+}
+
+
+/* =====================================================
+   MICROPHONE
+===================================================== */
+
+function startVoice(){
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if(!SpeechRecognition){
+
+        addMessage(
+            "❌ La reconnaissance vocale n'est pas disponible dans ce navigateur.",
+            "assistant",
+            true
+        );
+
+        return;
+    }
+
+    if(recognition){
+
+        try{
+            recognition.stop();
+        }catch(e){}
+
+    }
+
+    recognition =
+        new SpeechRecognition();
+
+    recognition.lang =
+        getLocale();
+
+    recognition.continuous =
+        false;
+
+    recognition.interimResults =
+        false;
+
+    document.getElementById("status").textContent =
+        translations[currentLanguage].listening;
+
+    recognition.start();
+
+    recognition.onresult =
+        function(event){
+
+            const text =
+                event.results[0][0].transcript;
+
+            document.getElementById("question").value =
+                text;
+
+            document.getElementById("status").textContent =
+                translations[currentLanguage].ready;
+
+            sendQuestion();
+        };
+
+    recognition.onerror =
+        function(){
+
+            document.getElementById("status").textContent =
+                translations[currentLanguage].ready;
+        };
+
+    recognition.onend =
+        function(){
+
+            document.getElementById("status").textContent =
+                translations[currentLanguage].ready;
+        };
+}
+
+
+/* =====================================================
+   ENVOYER QUESTION
+===================================================== */
+
+function sendQuestion(){
+
+    const input =
+        document.getElementById("question");
+
+    const question =
+        input.value.trim();
+
+    if(!question) return;
+
+    addMessage(
+        question,
+        "user",
+        false
+    );
+
+    input.value = "";
+
+    assistant(question);
+}
+
+
+/* =====================================================
+   BOUTONS RAPIDES
+===================================================== */
+
+function quickAsk(type){
+
+    if(type === "time"){
+
+        showTime();
+
+    }
+
+    else if(type === "date"){
+
+        showDate();
+
+    }
+
+    else if(type === "weather"){
+
+        getWeather();
+
+    }
+
+    else if(type === "football"){
+
+        getFootballMatches();
+
+    }
+
+}
+
+
+/* =====================================================
+   HEURE
+===================================================== */
+
+function showTime(){
+
+    const now =
+        new Date();
+
+    const time =
+        now.toLocaleTimeString(
+            getLocale(),
+            {
+                hour:"2-digit",
+                minute:"2-digit",
+                second:"2-digit"
+            }
+        );
+
+    const text =
+        translations[currentLanguage].time
+        + " "
+        + time
+        + ".";
+
+    addMessage(
+        text,
+        "assistant",
+        true
+    );
+}
+
+
+/* =====================================================
+   DATE
+===================================================== */
+
+function showDate(){
+
+    const now =
+        new Date();
+
+    const date =
+        now.toLocaleDateString(
+            getLocale(),
+            {
+                weekday:"long",
+                year:"numeric",
+                month:"long",
+                day:"numeric"
+            }
+        );
+
+    const text =
+        translations[currentLanguage].date
+        + " "
+        + date
+        + ".";
+
+    addMessage(
+        text,
+        "assistant",
+        true
+    );
+}
+
+
+/* =====================================================
+   MÉTÉO
+===================================================== */
+
+function getWeather(){
+
+    addMessage(
+        translations[currentLanguage].weather,
+        "assistant",
+        true
+    );
+
+    if(!navigator.geolocation){
+
+        addMessage(
+            translations[currentLanguage].weatherDenied,
+            "assistant",
+            true
+        );
+
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+
+        async function(position){
+
+            const lat =
+                position.coords.latitude;
+
+            const lon =
+                position.coords.longitude;
+
+            try{
+
+                const url =
+                "https://api.open-meteo.com/v1/forecast"
+                + "?latitude=" + lat
+                + "&longitude=" + lon
+                + "&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code"
+                + "&timezone=auto";
+
+                const response =
+                    await fetch(url);
+
+                const data =
+                    await response.json();
+
+                const current =
+                    data.current;
+
+                const temperature =
+                    current.temperature_2m;
+
+                const humidity =
+                    current.relative_humidity_2m;
+
+                const wind =
+                    current.wind_speed_10m;
+
+                const description =
+                    weatherDescription(
+                        current.weather_code
+                    );
+
+                let text;
+
+                if(currentLanguage === "fr"){
+
+                    text =
+                    "🌤️ Météo actuelle\n\n"
+                    + description
+                    + "\n🌡️ Température : "
+                    + temperature
+                    + " °C\n"
+                    + "💧 Humidité : "
+                    + humidity
+                    + " %\n"
+                    + "💨 Vent : "
+                    + wind
+                    + " km/h";
+
+                }
+
+                else if(currentLanguage === "pt"){
+
+                    text =
+                    "🌤️ Clima atual\n\n"
+                    + description
+                    + "\n🌡️ Temperatura: "
+                    + temperature
+                    + " °C\n"
+                    + "💧 Umidade: "
+                    + humidity
+                    + " %\n"
+                    + "💨 Vento: "
+                    + wind
+                    + " km/h";
+
+                }
+
+                else if(currentLanguage === "ht"){
+
+                    text =
+                    "🌤️ Meteyo aktyèl\n\n"
+                    + description
+                    + "\n🌡️ Tanperati: "
+                    + temperature
+                    + " °C\n"
+                    + "💧 Imidite: "
+                    + humidity
+                    + " %\n"
+                    + "💨 Van: "
+                    + wind
+                    + " km/h";
+
+                }
+
+                else if(currentLanguage === "en"){
+
+                    text =
+                    "🌤️ Current weather\n\n"
+                    + description
+                    + "\n🌡️ Temperature: "
+                    + temperature
+                    + " °C\n"
+                    + "💧 Humidity: "
+                    + humidity
+                    + " %\n"
+                    + "💨 Wind: "
+                    + wind
+                    + " km/h";
+
+                }
+
+                else{
+
+                    text =
+                    "🌤️ Clima actual\n\n"
+                    + description
+                    + "\n🌡️ Temperatura: "
+                    + temperature
+                    + " °C\n"
+                    + "💧 Humedad: "
+                    + humidity
+                    + " %\n"
+                    + "💨 Viento: "
+                    + wind
+                    + " km/h";
+                }
+
+                addMessage(
+                    text,
+                    "assistant",
+                    true
+                );
+
+            }
+
+            catch(error){
+
+                addMessage(
+                    translations[currentLanguage].weatherError,
+                    "assistant",
+                    true
+                );
+
+            }
+
+        },
+
+        function(){
+
+            addMessage(
+                translations[currentLanguage].weatherDenied,
+                "assistant",
+                true
+            );
+
+        }
+
+    );
+
+}
+
+
+/* =====================================================
+   DESCRIPTION MÉTÉO
+===================================================== */
+
+function weatherDescription(code){
+
+    const descriptions = {
+
+        0:"☀️ Ciel dégagé",
+
+        1:"🌤️ Principalement dégagé",
+
+        2:"⛅ Partiellement nuageux",
+
+        3:"☁️ Couvert",
+
+        45:"🌫️ Brouillard",
+
+        48:"🌫️ Brouillard givrant",
+
+        51:"🌦️ Bruine légère",
+
+        53:"🌦️ Bruine",
+
+        55:"🌧️ Bruine forte",
+
+        61:"🌧️ Pluie légère",
+
+        63:"🌧️ Pluie",
+
+        65:"🌧️ Forte pluie",
+
+        71:"🌨️ Neige légère",
+
+        73:"🌨️ Neige",
+
+        75:"❄️ Forte neige",
+
+        80:"🌦️ Averses légères",
+
+        81:"🌧️ Averses",
+
+        82:"⛈️ Fortes averses",
+
+        95:"⛈️ Orage",
+
+        96:"⛈️ Orage avec grêle",
+
+        99:"⛈️ Fort orage"
+
+    };
+
+    return descriptions[code]
+        || "🌤️ Conditions météo actuelles";
+}
+
+
+/* =====================================================
+   MATCHS DE FOOTBALL
+===================================================== */
+
+async function getFootballMatches(){
+
+    addMessage(
+        translations[currentLanguage].football,
+        "assistant",
+        true
+    );
+
+    const today =
+        new Date()
+        .toISOString()
+        .split("T")[0];
+
+    const url =
+        "https://v3.football.api-sports.io/fixtures?date="
+        + today;
+
+    try{
+
+        const response =
+            await fetch(
+                url,
+                {
+                    method:"GET",
+
+                    headers:{
+                        "x-apisports-key":
+                        FOOTBALL_API_KEY
+                    }
+                }
+            );
+
+        if(!response.ok){
+
+            throw new Error(
+                "API Error " +
+                response.status
+            );
+        }
+
+        const data =
+            await response.json();
+
+        if(!data.response ||
+           data.response.length === 0){
+
+            addMessage(
+                translations[currentLanguage].noMatches,
+                "assistant",
+                true
+            );
+
+            return;
+        }
+
+        const matches =
+            data.response.slice(0,30);
+
+        let text =
+            "⚽ MATCHS DU JOUR\n\n";
+
+        matches.forEach(
+            function(match){
+
+                const home =
+                    match.teams.home.name;
+
+                const away =
+                    match.teams.away.name;
+
+                const league =
+                    match.league.name;
+
+                const country =
+                    match.league.country;
+
+                const time =
+                    new Date(
+                        match.fixture.date
+                    ).toLocaleTimeString(
+                        getLocale(),
+                        {
+                            hour:"2-digit",
+                            minute:"2-digit"
+                        }
+                    );
+
+                text +=
+                    "⚽ "
+                    + home
+                    + " - "
+                    + away
+                    + "\n"
+                    + "🏆 "
+                    + league
+                    + " — "
+                    + country
+                    + "\n"
+                    + "🕐 "
+                    + time
+                    + "\n\n";
+            }
+        );
+
+        addMessage(
+            text,
+            "assistant",
+            false
+        );
+
+        if(voiceEnabled){
+
+            speakText(
+                currentLanguage === "fr"
+                ? "Voici les matchs de football disponibles aujourd'hui."
+                : currentLanguage === "pt"
+                ? "Aqui estão os jogos de futebol de hoje."
+                : currentLanguage === "ht"
+                ? "Men match foutbòl ki genyen jodi a."
+                : currentLanguage === "en"
+                ? "Here are today's football matches."
+                : "Aquí están los partidos de fútbol de hoy."
+            );
+        }
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        addMessage(
+            translations[currentLanguage].footballError
+            + "\n\n"
+            + "Erreur API : "
+            + error.message,
+            "assistant",
+            true
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   ASSISTANT
+===================================================== */
+
+function assistant(question){
+
+    const q =
+        question
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g,"");
+
+    /* HEURE */
+
+    if(
+        q.includes("heure") ||
+        q.includes("hora") ||
+        q.includes("time") ||
+        q.includes("ki le")
+    ){
+
+        showTime();
+
+        return;
+    }
+
+
+    /* DATE */
+
+    if(
+        q.includes("date") ||
+        q.includes("jour") ||
+        q.includes("data") ||
+        q.includes("today")
+    ){
+
+        showDate();
+
+        return;
+    }
+
+
+    /* MÉTÉO */
+
+    if(
+        q.includes("meteo") ||
+        q.includes("météo") ||
+        q.includes("clima") ||
+        q.includes("weather") ||
+        q.includes("tanperati") ||
+        q.includes("temps")
+    ){
+
+        getWeather();
+
+        return;
+    }
+
+
+    /* FOOTBALL */
+
+    if(
+        q.includes("football") ||
+        q.includes("futebol") ||
+        q.includes("foutbol") ||
+        q.includes("match") ||
+        q.includes("jogo") ||
+        q.includes("partido")
+    ){
+
+        getFootballMatches();
+
+        return;
+    }
+
+
+    /* SALUTATIONS */
+
+    if(
+        q.includes("bonjour") ||
+        q.includes("bonsoir") ||
+        q.includes("salut") ||
+        q.includes("hello") ||
+        q.includes("hi") ||
+        q.includes("bonjour") ||
+        q.includes("olá") ||
+        q.includes("ola") ||
+        q.includes("bonjou") ||
+        q.includes("bonswa")
+    ){
+
+        const hour =
+            new Date().getHours();
+
+        const greeting =
+            hour >= 5 && hour < 18
+            ? translations[currentLanguage].daytime
+            : translations[currentLanguage].nighttime;
+
+        addMessage(
+            greeting,
+            "assistant",
+            true
+        );
+
+        return;
+    }
+
+
+    /* RÉPONSE GÉNÉRALE */
+
+    let response;
+
+    if(currentLanguage === "fr"){
+
+        response =
+        "Je suis Worken Assistant 🤖.\n\n"
+        + "Je peux actuellement vous aider avec :\n"
+        + "🕐 l'heure\n"
+        + "📅 la date\n"
+        + "🌤️ la météo\n"
+        + "⚽ les matchs de football\n"
+        + "🎤 la reconnaissance vocale\n\n"
+        + "Essayez par exemple : « Quelle heure est-il ? »";
+
+    }
+
+    else if(currentLanguage === "pt"){
+
+        response =
+        "Eu sou o Worken Assistant 🤖.\n\n"
+        + "Atualmente posso ajudar você com:\n"
+        + "🕐 hora\n"
+        + "📅 data\n"
+        + "🌤️ clima\n"
+        + "⚽ jogos de futebol\n"
+        + "🎤 reconhecimento de voz\n\n"
+        + "Por exemplo: « Que horas são? »";
+
+    }
+
+    else if(currentLanguage === "ht"){
+
+        response =
+        "Mwen se Worken Assistant 🤖.\n\n"
+        + "Kounye a mwen kapab ede ou avèk:\n"
+        + "🕐 lè\n"
+        + "📅 dat\n"
+        + "🌤️ meteyo\n"
+        + "⚽ match foutbòl\n"
+        + "🎤 rekonesans vwa\n\n"
+        + "Pa egzanp: « Ki lè li ye? »";
+
+    }
+
+    else if(currentLanguage === "en"){
+
+        response =
+        "I am Worken Assistant 🤖.\n\n"
+        + "I can currently help you with:\n"
+        + "🕐 time\n"
+        + "📅 date\n"
+        + "🌤️ weather\n"
+        + "⚽ football matches\n"
+        + "🎤 voice recognition\n\n"
+        + "For example: “What time is it?”";
+
+    }
+
+    else{
+
+        response =
+        "Soy Worken Assistant 🤖.\n\n"
+        + "Actualmente puedo ayudarte con:\n"
+        + "🕐 hora\n"
+        + "📅 fecha\n"
+        + "🌤️ clima\n"
+        + "⚽ partidos de fútbol\n"
+        + "🎤 reconocimiento de voz\n\n"
+        + "Por ejemplo: « ¿Qué hora es? »";
+    }
+
+    addMessage(
+        response,
+        "assistant",
+        true
+    );
+
+}
+
+
+/* =====================================================
+   MESSAGE AUTOMATIQUE AU DÉMARRAGE
+===================================================== */
+
+window.addEventListener(
+    "load",
+    function(){
+
+        setTimeout(
+            function(){
+
+                const hour =
+                    new Date().getHours();
+
+                let message;
+
+                if(
+                    hour >= 5 &&
+                    hour < 18
+                ){
+
+                    message =
+                    translations[
+                        currentLanguage
+                    ].daytime;
+
+                }
+
+                else{
+
+                    message =
+                    translations[
+                        currentLanguage
+                    ].nighttime;
+
+                }
+
+                addMessage(
+                    "🤖 " + message,
+                    "assistant",
+                    true
+                );
+
+            },
+            1000
+        );
+
+    }
+);
+
+
+/* =====================================================
+   TOUCHE ENTRÉE
+===================================================== */
+
+document
+.getElementById("question")
+.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Enter"){
+
+            event.preventDefault();
+
+            sendQuestion();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   INITIALISATION
+===================================================== */
+
+changeLanguage();
+
+</script>
+
+</body>
+</html>
